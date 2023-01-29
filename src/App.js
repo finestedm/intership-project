@@ -1,16 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
-import eee from './eee';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory, useSearchParams } from 'react-router-dom';
 import { Router, Routes, Route, Link, useParams  } from 'react-router-dom';
 import Posts from './Posts';
-import { Container, Button, Row, Col, Stack } from 'react-bootstrap';
+import { Container, Button, Row, Col, Stack, Form } from 'react-bootstrap';
 
 export default function App() {
 
   const [data, setData] = useState([])
-  const [searchParameters, setSearchParameters] = useSearchParams({page: null})
+  const [searchParameters, setSearchParameters] = useSearchParams({page: 1})
   
   function handlePageChange(value) {
     const currentPageNumber = parseInt(searchParameters.get('page'))
@@ -37,13 +35,18 @@ export default function App() {
   return (
     <div className="App">
       <Container>
+        <h1>you are on {searchParameters.get('page')} page</h1>
         <Routes>
           <Route path='/' element={<Posts name={searchParameters.get('page')} data={data} />} />
         </Routes>
         <Stack direction="horizontal" className='d-flex justify-content-between'>
-          <Button as='Col' onClick={() => handlePageChange('prev')}> Prev </Button>
-          <Button as='Col' onClick={() => handlePageChange('next')}> Next </Button>
+          <Col><Button onClick={() => handlePageChange('prev')}> Prev </Button></Col>
+          <Col><Button onClick={() => handlePageChange('next')}> Next </Button></Col>
         </Stack>
+        <>
+        <Form.Control
+          placeholder='product id'
+        /></>
       </Container>
     </div>
   );
