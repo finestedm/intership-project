@@ -41,13 +41,16 @@ export default function App() {
 
     const fetchData = async () => {
       const data = await fetch(url);
-      const json = await data.json();
-      return json
+      if (data.status === 200) {
+        const json = await data.json();
+        return json
+      } else  {
+        throw new Error (data.status)
+      }
     }
 
     fetchData()
       .then((res) => setDataDependingOnType(res.data))
-      .catch(console.error)
   }, [searchParameters])
 
   useEffect(() => {
