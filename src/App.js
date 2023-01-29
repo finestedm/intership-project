@@ -6,7 +6,7 @@ import Posts from './Posts';
 import { Container, Button, Row, Col, Stack, Form, InputGroup } from 'react-bootstrap';
 
 export default function App() {
-
+  const [isError, setIsError] = useState(false)
   const [data, setData] = useState([]);
   const [input, setInput] = useState('')
   const [searchParameters, setSearchParameters] = useSearchParams({ page: 1, id: '' });
@@ -42,15 +42,18 @@ export default function App() {
     const fetchData = async () => {
       const data = await fetch(url);
       if (data.status === 200) {
+        setIsError(false)
         const json = await data.json();
         return json
-      } else  {
+      } else {
+        setIsError(true)
         throw new Error (data.status)
       }
     }
 
     fetchData()
       .then((res) => setDataDependingOnType(res.data))
+      .catch((err) => console.log(err))
   }, [searchParameters])
 
   useEffect(() => {
@@ -61,9 +64,11 @@ export default function App() {
   return (
     <div className="App">
       <Container className='d-flex flex-column gap-4'>
-        <Routes>
-          <Route path='/' element={<Posts name={searchParameters.get('page')} data={data} />} />
-        </Routes>
+        {isError ? <h1>Error</h1> :
+          <Routes>
+            <Route path='/' element={<Posts name={searchParameters.get('page')} data={data} />} />
+          </Routes>
+        }
         <Stack direction="horizontal" className='d-flex justify-content-between'>
           <Button onClick={() => handlePageChange('prev')}> Prev </Button>
           <Button onClick={() => handlePageChange('next')}> Next </Button>

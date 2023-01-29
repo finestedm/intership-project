@@ -31,7 +31,7 @@ export default function Posts({ data }) {
     return (
         <>
             <ListGroup>
-                {data.map(product => <Post showModal={showModal} product={product} setProductSelected={setProductSelected} />)}
+                {data.map(product => <Post showModal={showModal} product={product} key={product.id} setProductSelected={setProductSelected} />)}
             </ListGroup>
             {productSelected && <ProductModal show={show} showModal={showModal} productSelected={productSelected} />}
         </>
